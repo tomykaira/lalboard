@@ -408,47 +408,44 @@ class Lalboard(MemoizableDesign):
 
         combined_cluster = Union(base, *key_bases, name="combined_cluster")
 
-        center_hole = Box(5, 5, combined_cluster.size().z, name="center_hole")
-        center_hole.place(~center_hole == ~base,
-                          ~center_hole == ~base,
-                          -center_hole == -base)
-
-        center_nub_hole = Box(center_hole.size().x, 2.6, 4.6)
-        center_nub_hole.place(
-            ~center_nub_hole == ~base,
-            (-center_nub_hole == +center_hole) + .8,
-            +center_nub_hole == +combined_cluster)
-
-        central_magnet_cutout = self.horizontal_magnet_cutout(name="central_magnet_cutout")
-        central_magnet_cutout.place(~central_magnet_cutout == ~center_hole,
-                                    +central_magnet_cutout == -center_hole,
-                                    (~central_magnet_cutout == +combined_cluster) - 3.5)
-
         west_cavity = west_base.find_children("negatives")[0]
         west_pt_cavity = west_cavity.find_children("pt_cavity")[0]
         east_cavity = east_base.find_children("negatives")[0]
         east_led_cavity = east_cavity.find_children("led_cavity")[0]
 
-        central_led_cavity = self.make_bottom_entry_led_cavity(name="led_cavity")
-        central_led_cavity.rz(180)
-        central_led_cavity.place(+central_led_cavity == -east_led_cavity,
-                                 +central_led_cavity == +east_led_cavity,
-                                 +central_led_cavity == +east_led_cavity)
+        choc = self.cluster_center_kailh_choc(temp_key_base_upper.size().z)
+        choc.place(~choc == ~base,
+                   ~choc == ~base,
+                   (-choc == -base) - 2.2)
 
-        central_pt_cavity = self.make_bottom_entry_led_cavity(name="pt_cavity")
-        central_pt_cavity.place(-central_pt_cavity == +west_pt_cavity,
-                                +central_pt_cavity == +west_pt_cavity,
-                                +central_pt_cavity == +west_pt_cavity)
-
-        extruded_led_cavity = ExtrudeTo(central_led_cavity.named_faces("lens_hole"), central_pt_cavity.copy(False))
-        extruded_pt_cavity = ExtrudeTo(central_pt_cavity.named_faces("lens_hole"), central_led_cavity.copy(False))
-
-        result = Difference(combined_cluster, *key_base_negatives, center_hole, center_nub_hole, central_magnet_cutout,
-                            extruded_led_cavity, extruded_pt_cavity)
+        result = Difference(combined_cluster, *key_base_negatives, choc)
 
         result.add_named_point("lower_left_corner", [west_base.min().x, west_base.min().y, 0])
         result.add_named_point("lower_right_corner", [east_base.max().x, east_base.min().y, 0])
         return result
+
+    def cluster_center_kailh_choc(self, base_height):
+        body_width = 15.0
+        body_depth = 15.0
+        body_height = 5.5
+        button_width = 13.8
+        button_depth = 7.0
+        button_height = 2.5
+
+        body = Box(
+            body_width,
+            body_depth,
+            body_height,
+            name="choc_body")
+        button = Box(
+            button_width,
+            button_depth,
+            base_height - body_height + 2.2,
+            name="choc_button")
+        button.place(~button == ~body,
+                ~button == ~body,
+                -button == +body)
+        return Union(body, button)
 
     def cluster_pcb(self, cluster, front, back):
         hole_size = .35
@@ -460,13 +457,6 @@ class Lalboard(MemoizableDesign):
             ~pcb_plane == ~cluster,
             ~pcb_plane == ~cluster,
             +pcb_plane == -back)
-
-        center_hole: Box = cluster.find_children("center_hole")[0]
-        full_cluster = Fillet(
-            full_cluster.shared_edges(
-                full_cluster.find_faces([center_hole.left, center_hole.right]),
-                full_cluster.find_faces([center_hole.front, center_hole.back])),
-            .8)
 
         pcb_silhouette = Silhouette(full_cluster, pcb_plane.get_plane())
 
@@ -782,8 +772,12 @@ class Lalboard(MemoizableDesign):
         key_radius = 7.5
         key_rim_height = .5
         key_thickness = 2
-        post_length = 7.9 + 2
+        post_length = 2.4
         key_travel = 1.9
+
+        choc_button_width = 13.4
+        choc_button_depth = 6.2
+        choc_button_height = 2.1
 
         fillet_radius = 1.2
 
@@ -798,7 +792,7 @@ class Lalboard(MemoizableDesign):
                              -key_rim_hollow == -key_rim)
         key_rim = Difference(key_rim, key_rim_hollow)
 
-        center_post = Box(5 - .2, 5 - .1, post_length + key_rim_height, name="center_post")
+        center_post = Box(choc_button_width, choc_button_depth, post_length + key_rim_height, name="center_post")
         center_post = Fillet(
             center_post.shared_edges(
                 [center_post.front, center_post.back],
@@ -810,29 +804,38 @@ class Lalboard(MemoizableDesign):
             (~center_post == ~key) + .05,
             -center_post == +key)
 
-        interruptor_post = Box(3.5, 2, .65 + key_travel + key_rim_height, name="interruptor_post")
-        interruptor_post.place(
-            ~interruptor_post == ~key,
-            (-interruptor_post == +center_post) + 1.2,
-            -interruptor_post == +key)
-        fillet_edges = interruptor_post.shared_edges(
-            [interruptor_post.top, interruptor_post.back, interruptor_post.right, interruptor_post.left],
-            [interruptor_post.top, interruptor_post.back, interruptor_post.right, interruptor_post.left])
-        interruptor_post = Fillet(fillet_edges, fillet_radius)
+        choc_pin_l = self.choc_mount_pin()
+        choc_pin_r = self.choc_mount_pin()
 
-        bounding_cylinder = Cylinder(center_post.max().z - key.min().z, key_radius)
-        bounding_cylinder.place(~bounding_cylinder == ~key,
-                                ~bounding_cylinder == ~key,
-                                -bounding_cylinder == -key)
+        choc_pin_l.place(
+                (~choc_pin_l == ~center_post) - 5.7/2,
+                ~choc_pin_l == ~center_post,
+                -choc_pin_l == +center_post)
+        choc_pin_r.place(
+                (~choc_pin_r == ~center_post) + 5.7/2,
+                ~choc_pin_r == ~center_post,
+                -choc_pin_r == +center_post)
 
-        magnet = self.horizontal_tiny_magnet_cutout(1.3)
-        magnet.place(~magnet == ~center_post,
-                     -magnet == -center_post,
-                     (~magnet == +key_rim) + 3.5 + key_travel)
-
-        result = Difference(Union(key, key_rim, center_post, interruptor_post), magnet, name="center_key")
+        result = Union(key, key_rim, center_post, choc_pin_l, choc_pin_r, name="center_key")
 
         return result
+
+    def choc_mount_pin(self):
+        w = 1.2
+        d = 3.0
+        h = 3.0
+        top = Box(w, 0.5, h)
+        mid = Box(0.9, d, h)
+        bottom = Box(w, 0.5, h)
+        top.place(
+                ~top == ~mid,
+                +top == +mid,
+                ~top == ~mid)
+        bottom.place(
+                ~bottom == ~mid,
+                -bottom == -mid,
+                ~bottom == ~mid)
+        return Union(top, mid, bottom)
 
     def vertical_key_post(self, post_length, groove_height, groove_width, magnet_height):
         post = Box(post_width, post_length - key_thickness/2, key_thickness, name="post")
