@@ -12,4 +12,10 @@ K npn phototransistor
 F https://www.everlight.com/file/ProductFile/PT908-7B-F.pdf
 $ENDCMP
 #
+$CMP STM32L412C8T6
+D ARM Cortex-M4 MCU, 512KB flash, 160KB RAM, 80MHz, 38 GPIO, UFQFPN-48
+K ARM Cortex-M4 STM32L4 STM32L4x2
+F http://www.st.com/st-web-ui/static/active/en/resource/technical/document/datasheet/DM00340637.pdf
+$ENDCMP
+#
 #End Doc Library
