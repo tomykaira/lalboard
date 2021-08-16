@@ -979,7 +979,7 @@ class Lalboard(MemoizableDesign):
             key_angle=0,
             key_protrusion=4,
             key_displacement=0,
-            groove_height=4.546,
+            groove_height=2.68,
             groove_width=.6,
             magnet_height=8.748,
             name="outer_lower_thumb_key")
@@ -1838,7 +1838,7 @@ class Lalboard(MemoizableDesign):
     @MemoizableDesign.MemoizeComponent
     def _thumb_lower_outer_base(self):
         return self.vertical_key_base(
-            extra_height=4, pressed_key_angle=4.2, fillet_back_keywell_corners=True, name="lower_outer_base")
+            extra_height=4, pressed_key_angle=7, fillet_back_keywell_corners=True, name="lower_outer_base")
 
     @MemoizableDesign.MemoizeComponent
     def _thumb_inner_base(self):
