@@ -84,7 +84,7 @@
       (mirror false)
       (drillshape 0)
       (scaleselection 1)
-      (outputdirectory "/tmp/cluster/"))
+      (outputdirectory "gerbers/cluster/"))
   )
 
   (net 0 "")
@@ -1009,7 +1009,7 @@
   (via (at 159.8 82.1) (size 0.8) (drill 0.4) (layers F.Cu B.Cu) (net 11))
   (via (at 168.5 81.9) (size 0.8) (drill 0.4) (layers F.Cu B.Cu) (net 11))
 
-  (zone (net 11) (net_name GND) (layer B.Cu) (tstamp 605878C7) (hatch edge 0.508)
+  (zone (net 11) (net_name GND) (layer B.Cu) (tstamp 611A3ADA) (hatch edge 0.508)
     (connect_pads (clearance 0.508))
     (min_thickness 0.254)
     (fill yes (arc_segments 32) (thermal_gap 0.508) (thermal_bridge_width 0.508))
@@ -1186,7 +1186,7 @@
       )
     )
   )
-  (zone (net 11) (net_name GND) (layer F.Cu) (tstamp 605878C4) (hatch edge 0.508)
+  (zone (net 11) (net_name GND) (layer F.Cu) (tstamp 611A3AD7) (hatch edge 0.508)
     (connect_pads (clearance 0.508))
     (min_thickness 0.254)
     (fill yes (arc_segments 32) (thermal_gap 0.508) (thermal_bridge_width 0.508))
