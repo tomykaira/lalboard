@@ -23,7 +23,7 @@ EXPORT = False
 
 
 def design(context: lalboard.Lalboard):
-    assembly = context.cluster_assembly()
+    assembly = context.positioned_cluster_assembly(lalboard.AbsoluteFingerClusterPlacement(context), add_clip=False)
     assembly.create_occurrence(scale=.1)
 
 

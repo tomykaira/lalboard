@@ -31,7 +31,7 @@ import fscad.fscad
 from fscad.fscad import *
 from fscad.fscad import Component
 
-key_thickness = 1.8
+key_thickness = 1.4
 post_width = 7.3
 
 
@@ -49,8 +49,8 @@ class Lalboard(MemoizableDesign):
                        ~top_face == height)
         return Loft(bottom_face, top_face, name=name)
 
-    def horizontal_rotated_magnet_cutout(self, depth=1.8, name="magnet_cutout"):
-        result = self.tapered_box(1.45, 1.45, 1.7, 1.7, depth, name=name).rx(90).ry(45)
+    def horizontal_rotated_magnet_cutout(self, depth=1.6, name="magnet_cutout"):
+        result = self.tapered_box(1.8, 1.8, 2.2, 2.2, depth, name=name).rx(90).ry(45)
         result.add_named_faces("front", result.top)
         return result
 
@@ -64,7 +64,7 @@ class Lalboard(MemoizableDesign):
         return self.tapered_box(1.55, 1.55, 1.7, 1.7, depth, name)
 
     def vertical_rotated_magnet_cutout(self, depth=1.6, name="magnet_cutout"):
-        result = self.tapered_box(1.7, 1.7, 1.8, 1.8, depth, name).rz(45)
+        result = self.tapered_box(2, 2, 2.1, 2.1, depth, name).rz(45)
         result.add_named_faces("front", result.top)
         return result
 
@@ -130,13 +130,13 @@ class Lalboard(MemoizableDesign):
 
     def make_bottom_entry_led_cavity(self, name="led_cavity"):
         lens_height = 4.5
-        lens_radius = .75
+        lens_radius = .8
 
         body = Box(1.8, 5, 5.8, "body")
 
         lens_hole = Circle(lens_radius, name="lens_hole")
         lens_hole.ry(90).place(-lens_hole == +body, ~lens_hole == ~body, ~lens_hole == lens_height)
-        lens_slot = Box(lens_radius + .05 - .275, lens_radius * 2 + .1, lens_hole.max().z - body.min().z, "lens_slot")
+        lens_slot = Box(lens_radius + .05 - .2, lens_radius * 2 + .1, lens_hole.max().z - body.min().z, "lens_slot")
         lens_slot.place(-lens_slot == +body, ~lens_slot == ~body, +lens_slot == +lens_hole)
         lens_hole.place(~lens_hole == +lens_slot)
 
@@ -225,7 +225,8 @@ class Lalboard(MemoizableDesign):
 
     @MemoizableDesign.MemoizeComponent
     def vertical_key_base(self, extra_height=0.0, pressed_key_angle=12.5, extra_optical_width=0.55,
-                          fillet_back_keywell_corners=False, fillet_front_keywell_corners=False, name=None):
+                          fillet_back_keywell_corners=False, fillet_front_keywell_corners=False, name=None,
+                          magnet_mount_type="side"):
         post_hole_width = post_width + .3
 
         key_well = Box(
@@ -315,10 +316,21 @@ class Lalboard(MemoizableDesign):
         result = Union(key_well, upper_base)
         result = Difference(result, sloped_key, straight_key)
 
-        magnet_cutout = self.horizontal_rotated_magnet_cutout()
-        magnet_cutout.place(~magnet_cutout == ~key_well,
-                            -magnet_cutout == +straight_key,
-                            (+magnet_cutout == +key_well) - .4)
+        if magnet_mount_type == "side":
+            magnet_cutout = self.horizontal_rotated_magnet_cutout()
+            magnet_cutout.place(~magnet_cutout == ~key_well,
+                                -magnet_cutout == +straight_key,
+                                (+magnet_cutout == +key_well) - .4)
+        elif magnet_mount_type == "side_reverse":
+            magnet_cutout = self.horizontal_rotated_magnet_cutout().scale(sy=-1)
+            magnet_cutout.place(~magnet_cutout == ~key_well,
+                                (-magnet_cutout == +straight_key),
+                                (+magnet_cutout == +key_well) - .4)
+        elif magnet_mount_type == "top":
+            magnet_cutout = self.tapered_box(2, 1.5, 2.2, 1.7, 2 + 0.8, name=name)
+            magnet_cutout.place(~magnet_cutout == ~key_well,
+                                (-magnet_cutout == +straight_key) + 0.6,
+                                +magnet_cutout == +key_well)
 
         extruded_led_cavity = ExtrudeTo(led_cavity.named_faces("lens_hole"), result.copy(False))
         extruded_pt_cavity = ExtrudeTo(pt_cavity.named_faces("lens_hole"), result.copy(False))
@@ -372,13 +384,13 @@ class Lalboard(MemoizableDesign):
         temp_key_base_upper = temp_key_base.find_children("upper_base")[0]
         base = Box(24.9, 24.9, temp_key_base_upper.size().z, "base")
 
-        south_base = self.vertical_key_base(fillet_back_keywell_corners=True, name="south_base")
+        south_base = self.vertical_key_base(fillet_back_keywell_corners=True, name="south_base", magnet_mount_type="top")
         south_base.scale(-1, 1, 1)
         south_base.place(~south_base == ~base,
                          -south_base == -base,
                          +south_base == +base)
 
-        west_base = self.vertical_key_base(fillet_back_keywell_corners=True, name="west_base")
+        west_base = self.vertical_key_base(fillet_back_keywell_corners=True, name="west_base", magnet_mount_type="side_reverse")
         west_base.rz(-90)
         west_base.place(-west_base == -base,
                         ~west_base == ~base,
@@ -386,14 +398,14 @@ class Lalboard(MemoizableDesign):
 
         north_base = self.vertical_key_base(
             extra_optical_width=2.5, fillet_back_keywell_corners=True, fillet_front_keywell_corners=True,
-            name="north_base")
+            name="north_base", magnet_mount_type="top")
         north_base.scale(-1, 1, 1).rz(180)
         north_base.place(
             ~north_base == ~base,
             +north_base == +base,
             +north_base == +base)
 
-        east_base = self.vertical_key_base(fillet_back_keywell_corners=True, name="east_base")
+        east_base = self.vertical_key_base(fillet_back_keywell_corners=True, name="east_base", magnet_mount_type="side_reverse")
         east_base.rz(90)
         east_base.place(+east_base == +base,
                         ~east_base == ~base,
@@ -427,7 +439,7 @@ class Lalboard(MemoizableDesign):
     def cluster_center_kailh_choc(self, base_height):
         body_width = 15.0
         body_depth = 15.0
-        body_height = 5.5
+        body_height = 4 # orig: 5.5
         button_width = 13.8
         button_depth = 7.0
         button_height = 2.5
@@ -853,10 +865,16 @@ class Lalboard(MemoizableDesign):
                      +magnet == +post)
 
         groove_depth = .7
-        groove = Box(post.size().x, groove_width, groove_depth, name="groove")
+        rad30 = math.radians(30)
+        groove_box = Box(post.size().x, groove_width, groove_depth)
+        groove_angled = Box(post.size().x, groove_width, groove_depth / math.cos(rad30)).rx(30)
+        groove_angled.place(~groove_angled == ~groove_box,
+                (+groove_angled == +groove_box) + groove_depth * math.tan(rad30),
+                (+groove_angled == +groove_box))
+        groove = Union(groove_box, groove_angled, name="groove")
         groove.place(~groove == ~post,
                      (-groove == -pivot) + groove_height + key_thickness/2,
-                     -groove == -post)
+                     (+groove == -post) + groove_depth)
 
         end_fillet_tool_negative = Union(post.copy(), pivot.copy()).bounding_box.make_box()
         end_fillet_tool_negative = Fillet(
@@ -917,7 +935,7 @@ class Lalboard(MemoizableDesign):
             key_displacement=False,
             groove_height=1.353,
             groove_width=.75,
-            magnet_height=5.4,
+            magnet_height=4.8,
             name=name)
 
     @MemoizableDesign.MemoizeComponent
@@ -1367,13 +1385,13 @@ class Lalboard(MemoizableDesign):
         self._align_side_key(cluster.find_children("west_base")[0], west_key)
         self._align_side_key(cluster.find_children("north_base")[0], north_key)
 
-        center_key_magnet = down_key.find_children("magnet_cutout")[0]
-        center_cluster_magnet = cluster.find_children("central_magnet_cutout")[0]
-        down_key.rx(180).rz(180)
-        down_key.place(
-            ~center_key_magnet == ~center_cluster_magnet,
-            -center_key_magnet == +center_cluster_magnet,
-            ~center_key_magnet == ~center_cluster_magnet)
+        #center_key_magnet = down_key.find_children("magnet_cutout")[0]
+        #center_cluster_magnet = cluster.find_children("central_magnet_cutout")[0]
+        #down_key.rx(180).rz(180)
+        #down_key.place(
+        #    ~center_key_magnet == ~center_cluster_magnet,
+        #    -center_key_magnet == +center_cluster_magnet,
+        #    ~center_key_magnet == ~center_cluster_magnet)
 
         down_key_top_finder = down_key.bounding_box.make_box()
         down_key_top_finder.place(
@@ -1484,13 +1502,13 @@ class Lalboard(MemoizableDesign):
         self._align_side_key(cluster.find_children("west_base")[0], west_key)
         self._align_side_key(cluster.find_children("north_base")[0], north_key)
 
-        center_key_magnet = down_key.find_children("magnet_cutout")[0]
-        center_cluster_magnet = cluster.find_children("central_magnet_cutout")[0]
-        down_key.rx(180).rz(180)
-        down_key.place(
-            ~center_key_magnet == ~center_cluster_magnet,
-            -center_key_magnet == +center_cluster_magnet,
-            ~center_key_magnet == ~center_cluster_magnet)
+        #center_key_magnet = down_key.find_children("magnet_cutout")[0]
+        #center_cluster_magnet = cluster.find_children("central_magnet_cutout")[0]
+        #down_key.rx(180).rz(180)
+        #down_key.place(
+        #    ~center_key_magnet == ~center_cluster_magnet,
+        #    -center_key_magnet == +center_cluster_magnet,
+        #    ~center_key_magnet == ~center_cluster_magnet)
 
         front_magnet = Box((1/8) * 25.4, (1/8) * 25.4, (1/16) * 25.4, name="front_magnet")
         back_left_magnet = Box((1/8) * 25.4, (1/8) * 25.4, (1/16) * 25.4, name="back_left_magnet")
@@ -2420,11 +2438,12 @@ class Lalboard(MemoizableDesign):
                                side_magnet,
                                back_magnet,
                                front_magnet], name="thumb_cluster_" + suffix)
+        return cluster_group
 
         # down_key was already part of another component, so cluster_group has a new copy of it.
         # we need to get a reference of this new copy instead
         down_key = cluster_group.find_children(down_key.name, recursive=False)[0]
-        cluster_group.transform(placement.rotation_matrix )
+        # cluster_group.transform(placement.rotation_matrix )
         rotation_matrix_array = placement.rotation_matrix .asArray()
         rz = math.degrees(math.atan2(rotation_matrix_array[4], rotation_matrix_array[0]))
 
@@ -2508,6 +2527,7 @@ class Lalboard(MemoizableDesign):
                                side_magnet,
                                back_magnet,
                                front_magnet], name="thumb_cluster_" + suffix)
+        return cluster_group
 
         cluster_group.place(
             ~front_magnet == ~front_support,

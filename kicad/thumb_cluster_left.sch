@@ -1,4 +1,5 @@
 EESchema Schematic File Version 4
+LIBS:thumb_cluster_left-cache
 EELAYER 30 0
 EELAYER END
 $Descr A4 11693 8268
@@ -114,50 +115,15 @@ F 3 "https://www.everlight.com/file/ProductFile/201407052136280483.pdf" H 3450 2
 	0    1    -1   0   
 $EndComp
 $Comp
-L lalboard:PT908-7B-F PT3
-U 1 1 60613592
-P 4250 4350
-F 0 "PT3" H 4200 4550 50  0000 L CNN
-F 1 "PT908-7B-F" V 4500 4150 50  0000 L CNN
-F 2 "lalboard:PT908-7C-F" H 4730 4210 50  0001 C CNN
-F 3 "https://www.everlight.com/file/ProductFile/PT908-7B-F.pdf" H 4250 4350 50  0001 C CNN
-	1    4250 4350
-	1    0    0    -1  
-$EndComp
-Text GLabel 4550 4700 3    50   Input ~ 0
-C3
-$Comp
 L Device:R R3
 U 1 1 6061359F
-P 3500 4600
-F 0 "R3" V 3600 4550 50  0000 L CNN
-F 1 "120" V 3494 4524 50  0000 L CNN
-F 2 "Resistor_SMD:R_1206_3216Metric_Pad1.42x1.75mm_HandSolder" V 3430 4600 50  0001 C CNN
-F 3 "~" H 3500 4600 50  0001 C CNN
-	1    3500 4600
+P 3350 4500
+F 0 "R3" V 3450 4450 50  0000 L CNN
+F 1 "5.1k" V 3344 4424 50  0000 L CNN
+F 2 "Resistor_SMD:R_1206_3216Metric_Pad1.42x1.75mm_HandSolder" V 3280 4500 50  0001 C CNN
+F 3 "~" H 3350 4500 50  0001 C CNN
+	1    3350 4500
 	-1   0    0    1   
-$EndComp
-$Comp
-L lalboard:IR908-7C-F IR3
-U 1 1 606135A5
-P 3500 4250
-F 0 "IR3" V 3550 4350 50  0000 C CNN
-F 1 "IR908-7C-F" H 3500 4150 50  0000 C CNN
-F 2 "lalboard:IR908-7C-F" H 3500 4425 50  0001 C CNN
-F 3 "https://www.everlight.com/file/ProductFile/201407052136280483.pdf" H 3450 4250 50  0001 C CNN
-	1    3500 4250
-	0    1    -1   0   
-$EndComp
-$Comp
-L power:+5V #PWR0106
-U 1 1 606135B1
-P 4550 4000
-F 0 "#PWR0106" H 4550 3850 50  0001 C CNN
-F 1 "+5V" H 4565 4173 50  0000 C CNN
-F 2 "" H 4550 4000 50  0001 C CNN
-F 3 "" H 4550 4000 50  0001 C CNN
-	1    4550 4000
-	1    0    0    -1  
 $EndComp
 Text GLabel 6500 3100 3    50   Input ~ 0
 C4
@@ -472,41 +438,6 @@ Wire Notes Line
 	3050 2100 3050 3550
 Wire Notes Line
 	3050 3550 4850 3550
-Text GLabel 4150 4000 1    50   Input ~ 0
-C3
-$Comp
-L power:+5V #PWR010
-U 1 1 6150A0B2
-P 4150 4700
-F 0 "#PWR010" H 4150 4550 50  0001 C CNN
-F 1 "+5V" H 4165 4873 50  0000 C CNN
-F 2 "" H 4150 4700 50  0001 C CNN
-F 3 "" H 4150 4700 50  0001 C CNN
-	1    4150 4700
-	1    0    0    -1  
-$EndComp
-$Comp
-L Jumper:SolderJumper_3_Open JP12
-U 1 1 6150A907
-P 4350 4700
-F 0 "JP12" H 4350 4905 50  0000 C CNN
-F 1 "SolderJumper_3_Open" H 4350 4814 50  0000 C CNN
-F 2 "Jumper:SolderJumper-3_P1.3mm_Open_Pad1.0x1.5mm_NumberLabels" H 4350 4700 50  0001 C CNN
-F 3 "~" H 4350 4700 50  0001 C CNN
-	1    4350 4700
-	-1   0    0    1   
-$EndComp
-$Comp
-L Jumper:SolderJumper_3_Open JP11
-U 1 1 6150B729
-P 4350 4000
-F 0 "JP11" H 4350 4205 50  0000 C CNN
-F 1 "SolderJumper_3_Open" H 4350 4114 50  0000 C CNN
-F 2 "Jumper:SolderJumper-3_P1.3mm_Open_Pad1.0x1.5mm_NumberLabels" H 4350 4000 50  0001 C CNN
-F 3 "~" H 4350 4000 50  0001 C CNN
-	1    4350 4000
-	1    0    0    -1  
-$EndComp
 Wire Notes Line
 	3050 3700 4850 3700
 Wire Notes Line
@@ -653,8 +584,6 @@ Text Label 3500 1000 1    50   ~ 0
 5VGND
 Text Label 3500 2550 1    50   ~ 0
 5VGND
-Text Label 3500 4150 1    50   ~ 0
-5VGND
 Text Label 5600 2550 1    50   ~ 0
 5VGND
 Text Label 5600 4100 1    50   ~ 0
@@ -663,10 +592,101 @@ Text Label 3500 1600 3    50   ~ 0
 GND5V
 Text Label 3500 3150 3    50   ~ 0
 GND5V
-Text Label 3500 4750 3    50   ~ 0
-GND5V
 Text Label 5600 4700 3    50   ~ 0
 GND5V
 Text Label 5600 3150 3    50   ~ 0
 GND5V
+$Comp
+L Switch:SW_Push SW2
+U 1 1 61A47E90
+P 4000 4750
+F 0 "SW2" H 4000 5035 50  0000 C CNN
+F 1 "SW_Push" H 4000 4944 50  0000 C CNN
+F 2 "lalboard:CMI625501D06" H 4000 4950 50  0001 C CNN
+F 3 "~" H 4000 4950 50  0001 C CNN
+	1    4000 4750
+	1    0    0    -1  
+$EndComp
+$Comp
+L power:+5V #PWR0101
+U 1 1 61A4ACA5
+P 3350 4350
+F 0 "#PWR0101" H 3350 4200 50  0001 C CNN
+F 1 "+5V" H 3365 4523 50  0000 C CNN
+F 2 "" H 3350 4350 50  0001 C CNN
+F 3 "" H 3350 4350 50  0001 C CNN
+	1    3350 4350
+	1    0    0    -1  
+$EndComp
+Text GLabel 3350 4650 3    50   Input ~ 0
+C3
+$Comp
+L power:GND #PWR0102
+U 1 1 61A4BE48
+P 4200 4750
+F 0 "#PWR0102" H 4200 4500 50  0001 C CNN
+F 1 "GND" H 4205 4577 50  0000 C CNN
+F 2 "" H 4200 4750 50  0001 C CNN
+F 3 "" H 4200 4750 50  0001 C CNN
+	1    4200 4750
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	3350 4650 3800 4650
+Wire Wire Line
+	4200 4550 4200 4750
+Connection ~ 4200 4750
+$Comp
+L lalboard:D2FS-F-N SW1
+U 1 1 61A554B1
+P 3350 4100
+F 0 "SW1" H 4050 4465 50  0000 C CNN
+F 1 "D2FS-F-N" H 4050 4374 50  0000 C CNN
+F 2 "lalboard:Omron-D2FS-F-N-MFG" H 3350 4600 50  0001 L CNN
+F 3 "https://omronfs.omron.com/en_US/ecb/products/pdf/en-d2fs.pdf" H 3350 4700 50  0001 L CNN
+F 4 "+70°C" H 3350 4800 50  0001 L CNN "ambient temperature range high"
+F 5 "-20°C" H 3350 4900 50  0001 L CNN "ambient temperature range low"
+F 6 "No" H 3350 5000 50  0001 L CNN "automotive"
+F 7 "Switch" H 3350 5100 50  0001 L CNN "category"
+F 8 "0.1A" H 3350 5200 50  0001 L CNN "contact current rating"
+F 9 "100mΩ" H 3350 5300 50  0001 L CNN "contact resistance"
+F 10 "Electromechanical" H 3350 5400 50  0001 L CNN "device class L1"
+F 11 "Switches" H 3350 5500 50  0001 L CNN "device class L2"
+F 12 "Snap Action / Limit Switches" H 3350 5600 50  0001 L CNN "device class L3"
+F 13 "SWITCH SNAP ACT SPST-NO 100MA 6V" H 3350 5700 50  0001 L CNN "digikey description"
+F 14 "SW1978-ND" H 3350 5800 50  0001 L CNN "digikey part number"
+F 15 "10000Cycles" H 3350 5900 50  0001 L CNN "electromechanical life"
+F 16 "7.5mm" H 3350 6000 50  0001 L CNN "height"
+F 17 "Yes" H 3350 6100 50  0001 L CNN "lead free"
+F 18 "b5214ea7f66ad088" H 3350 6200 50  0001 L CNN "library id"
+F 19 "Omron" H 3350 6300 50  0001 L CNN "manufacturer"
+F 20 "Through Hole" H 3350 6400 50  0001 L CNN "mount"
+F 21 "Basic / Snap Action Switches Pin Plunger - PCB Terms Straight" H 3350 6500 50  0001 L CNN "mouser description"
+F 22 "653-D2FS-F-N" H 3350 6600 50  0001 L CNN "mouser part number"
+F 23 "0.85N" H 3350 6700 50  0001 L CNN "operating force"
+F 24 "PTH_SW_12MM8_5MM8" H 3350 6800 50  0001 L CNN "package"
+F 25 "Yes" H 3350 6900 50  0001 L CNN "rohs"
+F 26 "+70°C" H 3350 7000 50  0001 L CNN "temperature range high"
+F 27 "-20°C" H 3350 7100 50  0001 L CNN "temperature range low"
+F 28 "SPST-NO" H 3350 7200 50  0001 L CNN "throw configuration"
+F 29 "6V" H 3350 7300 50  0001 L CNN "voltage rating DC"
+	1    3350 4100
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	3800 4550 3800 4650
+Connection ~ 3800 4650
+Wire Wire Line
+	3800 4650 3800 4750
+Wire Wire Line
+	3450 4100 3450 4550
+Wire Wire Line
+	3450 4550 3800 4550
+Wire Wire Line
+	4200 4550 4750 4550
+Wire Wire Line
+	4750 4550 4750 4100
+Wire Wire Line
+	4750 4100 4650 4100
+NoConn ~ 4650 4300
 $EndSCHEMATC

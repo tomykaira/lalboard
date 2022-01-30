@@ -20,7 +20,7 @@ import lalboard
 
 
 def design(context: lalboard.Lalboard):
-    cluster = context.cluster_design()
+    cluster = context.cluster_key_tall()
     cluster.rx(180)
     cluster.create_occurrence(scale=.1)
 

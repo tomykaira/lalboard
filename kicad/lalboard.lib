@@ -1,6 +1,50 @@
 EESchema-LIBRARY Version 2.4
 #encoding utf-8
 #
+# D2FS-F-N
+#
+DEF D2FS-F-N SW 0 40 Y Y 1 L N
+F0 "SW" 0 300 50 H V L CNN
+F1 "D2FS-F-N" 0 400 50 H V L CNN
+F2 "Omron-D2FS-F-N-*" 0 500 50 H I L CNN
+F3 "https://omronfs.omron.com/en_US/ecb/products/pdf/en-d2fs.pdf" 0 600 50 H I L CNN
+F4 "+70°C" 0 700 50 H I L CNN "ambient temperature range high"
+F5 "-20°C" 0 800 50 H I L CNN "ambient temperature range low"
+F6 "No" 0 900 50 H I L CNN "automotive"
+F7 "Switch" 0 1000 50 H I L CNN "category"
+F8 "0.1A" 0 1100 50 H I L CNN "contact current rating"
+F9 "100mΩ" 0 1200 50 H I L CNN "contact resistance"
+F10 "Electromechanical" 0 1300 50 H I L CNN "device class L1"
+F11 "Switches" 0 1400 50 H I L CNN "device class L2"
+F12 "Snap Action / Limit Switches" 0 1500 50 H I L CNN "device class L3"
+F13 "SWITCH SNAP ACT SPST-NO 100MA 6V" 0 1600 50 H I L CNN "digikey description"
+F14 "SW1978-ND" 0 1700 50 H I L CNN "digikey part number"
+F15 "10000Cycles" 0 1800 50 H I L CNN "electromechanical life"
+F16 "7.5mm" 0 1900 50 H I L CNN "height"
+F17 "Yes" 0 2000 50 H I L CNN "lead free"
+F18 "b5214ea7f66ad088" 0 2100 50 H I L CNN "library id"
+F19 "Omron" 0 2200 50 H I L CNN "manufacturer"
+F20 "Through Hole" 0 2300 50 H I L CNN "mount"
+F21 "Basic / Snap Action Switches Pin Plunger - PCB Terms Straight" 0 2400 50 H I L CNN "mouser description"
+F22 "653-D2FS-F-N" 0 2500 50 H I L CNN "mouser part number"
+F23 "0.85N" 0 2600 50 H I L CNN "operating force"
+F24 "PTH_SW_12MM8_5MM8" 0 2700 50 H I L CNN "package"
+F25 "Yes" 0 2800 50 H I L CNN "rohs"
+F26 "+70°C" 0 2900 50 H I L CNN "temperature range high"
+F27 "-20°C" 0 3000 50 H I L CNN "temperature range low"
+F28 "SPST-NO" 0 3100 50 H I L CNN "throw configuration"
+F29 "6V" 0 3200 50 H I L CNN "voltage rating DC"
+DRAW
+C 630 0 20 1 1 0 N
+C 770 0 20 1 1 0 N
+S 200 200 1200 -300 1 1 0 f
+P 2 1 1 0 650 10 750 70 N
+X COM 1 100 0 500 R 40 0 1 1 P
+X NO 2 1300 0 500 L 40 0 1 1 P
+X Dummy_terminal 3 1300 -200 100 L 40 40 1 1 P
+ENDDRAW
+ENDDEF
+#
 # IR908-7C-F
 #
 DEF IR908-7C-F D 0 40 Y N 1 F N
